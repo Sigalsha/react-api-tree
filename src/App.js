@@ -1,6 +1,9 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from "react-loader-spinner";
+import Container from "@material-ui/core/Container";
 import "./App.css";
+import ResultsList from "./Results";
 
 const useNPSApi = () => {
   const [data, setData] = useState({ data: [] });
@@ -17,7 +20,6 @@ const useNPSApi = () => {
         const result = await axios(
           `https://developer.nps.gov/api/v1/parks?limit=20&api_key=EehDLFsT7C6bLbhX8mfU5ydj4C1SWawbOLY6AsD4&q=${query}`
         );
-
         setData(result.data);
       } catch (error) {
         setErrorStat(true);
@@ -45,34 +47,49 @@ function App() {
     };
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form className="search-form" onSubmit={handleSubmit}>
         <input
           type="text"
-          className="input"
+          className="search-input"
+          placeholder="search for the USA's national parks"
           value={value}
           onChange={e => setValue(e.target.value)}
         />
-        <button onClick={handleSubmit}>search</button>
+        <button className="search-btn" onClick={handleSubmit}>
+          search
+        </button>
       </form>
     );
   }
 
   return (
-    <Fragment>
+    <Container maxWidth="md" className="container">
       <QueryForm setQuery={setQuery} />
-      {isError && <div>Something went wrong ...</div>}
+      {isError && <h1 id="error">Something went wrong ...</h1>}
       {isLoading ? (
-        <div>Loading...</div>
+        <div id="loader">
+          <Loader
+            type="Ball-Triangle"
+            color="#284d19"
+            height={300}
+            width={300}
+          />
+        </div>
       ) : (
-        <ul>
+        <Container maxWidth="xl">
           {data.data.map(item => (
-            <li key={item.id}>
-              <a href={item.url}>{item.fullName}</a>
-            </li>
+            <ResultsList
+              key={item.id}
+              fullName={item.fullName}
+              directionsInfo={item.directionsInfo}
+              description={item.description}
+              states={item.states}
+              url={item.url}
+            />
           ))}
-        </ul>
+        </Container>
       )}
-    </Fragment>
+    </Container>
   );
 }
 
