@@ -8,7 +8,6 @@ import Collapse from "@material-ui/core/Collapse";
 import SendIcon from "@material-ui/icons/Send";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,7 +52,6 @@ export default function ResultsList({
           <SendIcon />
         </ListItemIcon>
         <ListItemText primary={fullName} />
-        <Avatar alt="park image" src={url} className={classes.bigAvatar} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -77,11 +75,7 @@ export default function ResultsList({
             </details>
           </ListItem>
           <ListItem button className={classes.nested}>
-            <details>
-              <summary>
-                <a href={url}>park page</a>
-              </summary>
-            </details>
+            <a href={url}>park page</a>
           </ListItem>
         </List>
       </Collapse>

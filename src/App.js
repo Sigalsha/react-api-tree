@@ -36,6 +36,7 @@ const useNPSApi = () => {
 
 function App() {
   const [{ data, isLoading, isError }, setQuery] = useNPSApi();
+  const isEmptyResult = data.total === "0";
 
   function QueryForm({ setQuery }) {
     const [value, setValue] = useState("");
@@ -64,8 +65,9 @@ function App() {
 
   return (
     <Container maxWidth="md" className="container">
+      <h1 id="header">USA's National Parks Service</h1>
       <QueryForm setQuery={setQuery} />
-      {isError && <h1 id="error">Something went wrong ...</h1>}
+      {isError && <h1 className="no-success">Something went wrong ...</h1>}
       {isLoading ? (
         <div id="loader">
           <Loader
@@ -87,6 +89,7 @@ function App() {
               url={item.url}
             />
           ))}
+          {isEmptyResult && <h1 className="no-success">No result was found</h1>}
         </Container>
       )}
     </Container>
